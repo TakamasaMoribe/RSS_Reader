@@ -34,6 +34,7 @@
 // ============================================================
         // １階層目のタグを覚えておく変数を用意する
         var XMLtag1:String! = ""
+        var XMLtag2:String! = "" // ２階層目
         // 表示するテキストを入れる変数
         var msg:String = ""
         // タグを入れる変数
@@ -48,26 +49,31 @@
             }
             // タグが「candidate」で、すでに「resultsタグ」に入った状態ならば、そのデータを取り出す
             if elementName == "candidate" && XMLtag1 == "results" {
-                print(XMLtag1)//
+                XMLtag2 = "candidate"
+                print("XMLtag1:\(XMLtag1)")//
                 print(elementName)//
+                print("XMLtag2:\(XMLtag2)")//
                 
-//                switch tagName {
-//                case <#pattern#>:
-//                    <#code#>
-//                default:
-//                    <#code#>
+//                // 属性「address」の文字を取り出してmsg変数に追加する
+//                if let addressName = attributeDict["address"]  {
+//                    msg += "住所:\(addressName)\n"
+//                    print(msg)
 //                }
-                // 属性「address」の文字を取り出してmsg変数に追加する
+//                // 属性「longitude」の文字を取り出してmsg変数に追加する
+//                if let longitude = attributeDict["longitude"]  {
+//                    msg += "経度:\(longitude)\n"
+//                }
+            }
+            
+            if elementName == "address" && XMLtag2 == "candidate" {
+
                 if let addressName = attributeDict["address"]  {
                     msg += "住所:\(addressName)\n"
                     print(msg)
                 }
-                // 属性「longitude」の文字を取り出してmsg変数に追加する
-                if let longitude = attributeDict["longitude"]  {
-                    msg += "経度:\(longitude)\n"
-                }
             }
         }
+            
         
         // タグの終わりが見つかったとき呼ばれる
         func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
@@ -75,7 +81,7 @@
             // タグが"results"ならば、タグが閉じられたので、XMLtag1をリセットする
             if elementName == "results" {
              XMLtag1 = ""
-                print(msg)
+                print("おわり:\(msg)")//確認ok
             }
         }
         
