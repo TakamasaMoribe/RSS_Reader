@@ -14,31 +14,38 @@
         @IBOutlet weak var tableView: UITableView!
 
 //        let feedUrl = URL(string:"https://news.yahoo.co.jp/rss/topics/top-picks.xml")!
-//        let feedUrl = URL(string:"https://geocode.csis.u-tokyo.ac.jp/cgi-bin/simple_geocode.cgi? addr=新宿")!
         let feedUrl = URL(string:"https://geocode.csis.u-tokyo.ac.jp/cgi-bin/simple_geocode.cgi?addr=%E6%96%B0%E5%AE%BF")! //新宿
-
         var feedItems = [FeedItem]()
-
-        var currentElementName : String! // RSSパース中の現在の要素名
-//        var currentTagName : String! // RSSパース中の現在のタグの名前
+        
+        var searchList:[(address:String,longitude:String,latitude:String)] = []
         
 
         var flagAddress : Bool = false
         var flagLongitude : Bool = false
         var flagLatitude : Bool = false
 
-// ============================================================
         // １階層目のタグを覚えておく変数を用意する
         var XMLtag1:String! = ""
         var XMLtag2:String! = "" // ２階層目
-        // 表示するテキストを入れる変数
-//        var msg:String! = ""
-        // タグを入れる変数
-//        var tagName:String! = ""
+        
+// ----------------------------------------------------------------------------------
+        override func viewDidLoad() {
+            super.viewDidLoad()
+            print("パース開始")
+            let parser: XMLParser! = XMLParser(contentsOf: feedUrl)
+            parser.delegate = self
+            parser.parse()
+        }
+        
+        override func didReceiveMemoryWarning() {
+            super.didReceiveMemoryWarning()
+            // Dispose of any resources that can be recreated.
+        }
+        
+// ----------------------------------------------------------------------------------
         
         //タグの最初が見つかったとき呼ばれる
         func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
-            //self.currentElementName = nil
             
             // タグが results ならば 「resultsタグ」に入ったことを、XMLtag1に覚えておく
             if elementName == "results" { XMLtag1 = "results" }
@@ -52,31 +59,39 @@
             if elementName == "latitude" { flagLatitude = true }
             
             // タグ1が「results」で、タグ2が「candidate」に入った状態ならば、そのデータを取り出す
-            if XMLtag1 == "results" && XMLtag2 == "candidate" {
-                
-                print("elementName:\(elementName)")//
-            }
+//            if XMLtag1 == "results" && XMLtag2 == "candidate" {
+//
+//                //print("elementName:\(elementName)")//
+//            }
         }
             
         // 開始タグと終了タグでくくられたデータがあったときに実行されるメソッド
          func parser(_ parser: XMLParser, foundCharacters string: String) {
-             //if (flagAddress == true) && (flagLongitude == true) && (flagLatitude == true) {
-             if (flagAddress == true)  { print(string) }
-             if (flagLongitude == true)  { print(string) }
-             if (flagLatitude == true)  { print(string) }
+             var address:String?
+             var longitude:String?
+             var latitude:String?
+             
+             if (flagAddress == true)  { print("Address:\(string)")
+                 address = string
+             }
+             if (flagLongitude == true)  { print("Longitude:\(string)")
+                 longitude = string
+             }
+             if (flagLatitude == true)  { print("Latitude:\(string)")
+                 latitude = string
+             }
+             
+             let item = (address,longitude,latitude)
+             print("item:\(item)")
              
              flagAddress = false
              flagLongitude = false
              flagLatitude = false
-             
-//             if XMLtag1 == "results" && XMLtag2 == "candidate" {
-//             print(string) //要素を表示する
-//             }
          }
         
         // タグの終わりが見つかったとき呼ばれる
         func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
-            //self.currentElementName = nil
+
             // タグが"results"ならば、タグが閉じられたので、XMLtag1,2をリセットする
             if elementName == "results" {
                 print("おわり:")//確認ok
@@ -105,32 +120,12 @@
                         cell.textLabel?.text = feedItem.address
             return cell
         }
-        
-        
-
-        override func viewDidLoad() {
-            super.viewDidLoad()
-            print("パース開始")
-            
-            let parser: XMLParser! = XMLParser(contentsOf: feedUrl)
-            parser.delegate = self
-            parser.parse()
-
-            //print("feedUrl:\(feedUrl)")//新宿をサーチした結果がある
-            //print(feedItems)
- 
-        }
-
-        
-        override func didReceiveMemoryWarning() {
-            super.didReceiveMemoryWarning()
-            // Dispose of any resources that can be recreated.
-        }
     }
 
+// 変更する？？？
     class FeedItem {
-
         var address: String!
         var longitude: String!
         var latitude: String!
     }
+
