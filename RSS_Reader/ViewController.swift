@@ -17,7 +17,7 @@
         let feedUrl = URL(string:"https://geocode.csis.u-tokyo.ac.jp/cgi-bin/simple_geocode.cgi?addr=%E6%96%B0%E5%AE%BF")! //新宿
         var feedItems = [FeedItem]()
         
-        var searchList:[(address:String,longitude:String,latitude:String)] = []
+        //var searchList:[(address:String,longitude:String,latitude:String)] = [] // タプルに入れてみる
         
 
         var flagAddress : Bool = false
@@ -32,7 +32,7 @@
         override func viewDidLoad() {
             super.viewDidLoad()
             print("パース開始")
-            let parser: XMLParser! = XMLParser(contentsOf: feedUrl)
+            let parser: XMLParser! = XMLParser(contentsOf: feedUrl) //feedUrlの中身をパースする？
             parser.delegate = self
             parser.parse()
         }
@@ -52,7 +52,9 @@
             // タグが candidate ならば 「candidateタグ」に入ったことを、XMLtag2に覚えておく
             if elementName == "candidate" { XMLtag2 = "candidate" }
             // タグが address ならば
-            if elementName == "address" { flagAddress = true }
+            if elementName == "address" { flagAddress = true
+
+            }
             // タグが longitude ならば
             if elementName == "longitude" { flagLongitude = true }
             // タグが latitude ならば
@@ -73,6 +75,9 @@
              
              if (flagAddress == true)  { print("Address:\(string)")
                  address = string
+                 self.feedItems.append(FeedItem())
+                 print(feedItems)
+
              }
              if (flagLongitude == true)  { print("Longitude:\(string)")
                  longitude = string
@@ -81,8 +86,8 @@
                  latitude = string
              }
              
-             let item = (address,longitude,latitude)
-             print("item:\(item)")
+             //let item = (address,longitude,latitude)
+             //print("item:\(item)")
              
              flagAddress = false
              flagLongitude = false
