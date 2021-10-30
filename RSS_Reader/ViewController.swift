@@ -75,8 +75,8 @@
              
              if (flagAddress == true)  { print("Address:\(string)")
                  address = string
-                 self.feedItems.append(FeedItem())
-                 print(feedItems)
+                 //self.feedItems.append(FeedItem())
+                 //print(feedItems)
 
              }
              if (flagLongitude == true)  { print("Longitude:\(string)")
