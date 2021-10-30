@@ -17,7 +17,11 @@
         let feedUrl = URL(string:"https://geocode.csis.u-tokyo.ac.jp/cgi-bin/simple_geocode.cgi?addr=%E6%96%B0%E5%AE%BF")! //新宿
         var feedItems = [FeedItem]()
         
+        var currentElementName:String! // パース中に、読み出している項目名
+        
         //var searchList:[(address:String,longitude:String,latitude:String)] = [] // タプルに入れてみる
+        
+        let ITEM_ELEMENT_NAME = "address"
         
 
         var flagAddress : Bool = false
@@ -44,47 +48,80 @@
         
 // ----------------------------------------------------------------------------------
         
+//        //タグの最初が見つかったとき呼ばれる
+//        func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
+//            //self.currentElementName = nil // 初期化
+//
+//            // タグが results ならば 「resultsタグ」に入ったことを、XMLtag1に覚えておく
+//            if elementName == "results" { XMLtag1 = "results" }
+//            // タグが candidate ならば 「candidateタグ」に入ったことを、XMLtag2に覚えておく
+//            if elementName == "candidate" { XMLtag2 = "candidate" }
+//            // タグが address ならば
+//            if elementName == "address" { flagAddress = true
+//
+//            }
+//            // タグが longitude ならば
+//            if elementName == "longitude" { flagLongitude = true }
+//            // タグが latitude ならば
+//            if elementName == "latitude" { flagLatitude = true }
+//
+//            // タグ1が「results」で、タグ2が「candidate」に入った状態ならば、そのデータを取り出す
+////            if XMLtag1 == "results" && XMLtag2 == "candidate" {
+////
+////                //print("elementName:\(elementName)")//
+////            }
+//        }
+        
         //タグの最初が見つかったとき呼ばれる
         func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
-            
-            // タグが results ならば 「resultsタグ」に入ったことを、XMLtag1に覚えておく
-            if elementName == "results" { XMLtag1 = "results" }
-            // タグが candidate ならば 「candidateタグ」に入ったことを、XMLtag2に覚えておく
-            if elementName == "candidate" { XMLtag2 = "candidate" }
-            // タグが address ならば
-            if elementName == "address" { flagAddress = true
-
+            self.currentElementName = nil // 初期化
+            if elementName == "address" {
+                currentElementName = "address"//???????????
+                self.feedItems.append(FeedItem())
+            } else {
+                currentElementName = elementName
             }
-            // タグが longitude ならば
-            if elementName == "longitude" { flagLongitude = true }
-            // タグが latitude ならば
-            if elementName == "latitude" { flagLatitude = true }
-            
-            // タグ1が「results」で、タグ2が「candidate」に入った状態ならば、そのデータを取り出す
-//            if XMLtag1 == "results" && XMLtag2 == "candidate" {
-//
-//                //print("elementName:\(elementName)")//
-//            }
         }
+        
+        
             
         // 開始タグと終了タグでくくられたデータがあったときに実行されるメソッド
          func parser(_ parser: XMLParser, foundCharacters string: String) {
-             var address:String?
-             var longitude:String?
-             var latitude:String?
              
-             if (flagAddress == true)  { print("Address:\(string)")
-                 address = string
-                 //self.feedItems.append(FeedItem())
-                 //print(feedItems)
-
+             if self.feedItems.count > 0 {
+                 let lastItem = self.feedItems[self.feedItems.count - 1]
+                 
+                 switch self.currentElementName {
+                 case "address":
+                     let tmpString = lastItem.address
+                     lastItem.address = (tmpString != nil) ? tmpString! + string : string
+                     print("lastItem.address:\(tmpString)")
+                     print(string)
+                 case "longitude":
+                     let tmpString = lastItem.longitude
+                     lastItem.longitude = (tmpString != nil) ? tmpString! + string : string
+                 case "latitude":
+                     let tmpString = lastItem.latitude
+                     lastItem.latitude = (tmpString != nil) ? tmpString! + string : string
+                 default:
+                     break
+                 }
+                 
              }
-             if (flagLongitude == true)  { print("Longitude:\(string)")
-                 longitude = string
-             }
-             if (flagLatitude == true)  { print("Latitude:\(string)")
-                 latitude = string
-             }
+             
+             
+//             if (flagAddress == true)  { print("Address:\(string)")
+//                 address = string
+//                 self.feedItems.append(FeedItem()) // tableViewのデータに対応している？
+//                 print(feedItems)
+//             }
+//
+//             if (flagLongitude == true)  { print("Longitude:\(string)")
+//                 longitude = string
+//             }
+//             if (flagLatitude == true)  { print("Latitude:\(string)")
+//                 latitude = string
+//             }
              
              //let item = (address,longitude,latitude)
              //print("item:\(item)")
