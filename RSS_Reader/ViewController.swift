@@ -21,7 +21,7 @@
         
         //var searchList:[(address:String,longitude:String,latitude:String)] = [] // タプルに入れてみる
         
-        let ITEM_ELEMENT_NAME = "address"
+        //let ITEM_ELEMENT_NAME = "address"
         
 
         var flagAddress : Bool = false
@@ -85,7 +85,7 @@
         
         
             
-        // 開始タグと終了タグでくくられたデータがあったときに実行されるメソッド
+        // 開始タグと終了タグでくくられたデータがあったときに実行されるメソッド。stringが得られる
          func parser(_ parser: XMLParser, foundCharacters string: String) {
              
              if self.feedItems.count > 0 {
@@ -95,14 +95,18 @@
                  case "address":
                      let tmpString = lastItem.address
                      lastItem.address = (tmpString != nil) ? tmpString! + string : string
-                     print("lastItem.address:\(tmpString)")
-                     print(string)
+                     if string != "\n" {print("address:\(string)")}//後ろ側の"address"を読んだときに、""になる
+                     
                  case "longitude":
                      let tmpString = lastItem.longitude
                      lastItem.longitude = (tmpString != nil) ? tmpString! + string : string
+                     if string != "\n" {print("longitude:\(string)")}//後ろ側の"longitude"を読んだときに、""になる
+                     
                  case "latitude":
                      let tmpString = lastItem.latitude
                      lastItem.latitude = (tmpString != nil) ? tmpString! + string : string
+                     if string != "\n" {print("latitude:\(string)")}//後ろ側の"latitude"を読んだときに、""になる
+                     
                  default:
                      break
                  }
