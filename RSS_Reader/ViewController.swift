@@ -114,7 +114,11 @@
         
         func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
             let feedItem = self.feedItems[indexPath.row]
-            UIApplication.shared.open(URL(string: feedItem.url)!, options: [:], completionHandler: nil)
+            print("選択した\(feedItem.address)")
+            print("選択した\(feedItem.longitude)")
+            print("選択した\(feedItem.latitude)")
+            
+         //   UIApplication.shared.open(URL(string: feedItem.url)!, options: [:], completionHandler: nil)
         }
         
     }
