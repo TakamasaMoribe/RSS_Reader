@@ -10,7 +10,11 @@
     import UIKit
 
     class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, XMLParserDelegate {
-
+        
+        @IBOutlet weak var longLabel: UILabel!
+        
+        @IBOutlet weak var latLabel: UILabel!
+        
         @IBOutlet weak var tableView: UITableView!
 
         let feedUrl = URL(string:"https://geocode.csis.u-tokyo.ac.jp/cgi-bin/simple_geocode.cgi?addr=%E6%96%B0%E5%AE%BF")! //新宿
@@ -43,7 +47,7 @@
             self.currentElementName = nil // 初期化
             if elementName == "address" {
                 currentElementName = "address"//???????????
-                self.feedItems.append(FeedItem())
+                self.feedItems.append(FeedItem())//???????????
             } else {
                 currentElementName = elementName
             }
@@ -85,9 +89,10 @@
                 print("おわり:")//確認ok
                 
                 let feedItem = self.feedItems
-                print(feedItem[1].address)//optionalになっている
-                print(feedItem[1].longitude)//optionalになっている
-                print(feedItem[1].latitude)//optionalになっている
+
+                print(feedItem[1].address!)//optionalになっている
+                print(feedItem[1].longitude!)//optionalになっている
+                print(feedItem[1].latitude!)//optionalになっている
             }
         }
  
@@ -103,22 +108,23 @@
             return self.feedItems.count
         }
 
-        // セルへの表示の準備
+        // セルへの表示
         func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
             let cell: UITableViewCell = UITableViewCell(style: UITableViewCell.CellStyle.subtitle, reuseIdentifier: "Cell")
             let feedItem = self.feedItems[indexPath.row]
-//            cell.textLabel?.text = feedItem.title
-                        cell.textLabel?.text = feedItem.address
+                cell.textLabel?.text = feedItem.address // 検索結果　住所の表示
             return cell
         }
         
         func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
             let feedItem = self.feedItems[indexPath.row]
-            print("選択した\(feedItem.address)")
-            print("選択した\(feedItem.longitude)")
-            print("選択した\(feedItem.latitude)")
+          //  let ad2 = feedItem
             
-         //   UIApplication.shared.open(URL(string: feedItem.url)!, options: [:], completionHandler: nil)
+            longLabel.text = feedItem.longitude!
+            latLabel.text = feedItem.latitude!
+            print("選択した:\(feedItem.address!)")
+            print("選択した:\(feedItem.longitude!)")
+            print("選択した:\(feedItem.latitude!)")
         }
         
     }
