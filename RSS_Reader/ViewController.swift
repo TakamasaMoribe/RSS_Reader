@@ -11,19 +11,16 @@
 
     class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, XMLParserDelegate {
         
-        @IBOutlet weak var longLabel: UILabel!
+        @IBOutlet weak var longLabel: UILabel! // 確認用
         
-        @IBOutlet weak var latLabel: UILabel!
+        @IBOutlet weak var latLabel: UILabel! // 確認用
         
         @IBOutlet weak var tableView: UITableView!
 
         let feedUrl = URL(string:"https://geocode.csis.u-tokyo.ac.jp/cgi-bin/simple_geocode.cgi?addr=%E6%96%B0%E5%AE%BF")! //新宿
         
         var feedItems = [FeedItem]() // tableViewの表示に使っている
-        
         var currentElementName:String! // パース中に、読み出している項目名
-        
-        //var searchList:[(address:String,longitude:String,latitude:String)] = [] // タプルに入れてみる
         
         
 // -------------------------------------------------------------------------------
@@ -64,15 +61,15 @@
                      case "address":
                          let tmpString = lastItem.address
                          lastItem.address = (tmpString != nil) ? tmpString! + string : string
-                         print("address:\(string)")//
+                         print("address:\(string)") // 確認用
                      case "longitude":
                          let tmpString = lastItem.longitude
                          lastItem.longitude = (tmpString != nil) ? tmpString! + string : string
-                         print("longitude:\(string)")//
+                         print("longitude:\(string)") // 確認用
                      case "latitude":
                          let tmpString = lastItem.latitude
                          lastItem.latitude = (tmpString != nil) ? tmpString! + string : string
-                         print("latitude:\(string)")//
+                         print("latitude:\(string)") // 確認用
                      default:
                          break
                     }
