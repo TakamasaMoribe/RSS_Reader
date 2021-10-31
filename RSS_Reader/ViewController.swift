@@ -111,6 +111,12 @@
                         cell.textLabel?.text = feedItem.address
             return cell
         }
+        
+        func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+            let feedItem = self.feedItems[indexPath.row]
+            UIApplication.shared.open(URL(string: feedItem.url)!, options: [:], completionHandler: nil)
+        }
+        
     }
 
 
