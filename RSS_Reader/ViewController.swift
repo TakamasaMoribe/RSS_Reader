@@ -26,7 +26,7 @@
         //var searchList:[(address:String,longitude:String,latitude:String)] = [] // タプルに入れてみる
         
         
-// ----------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------
         override func viewDidLoad() {
             super.viewDidLoad()
             print("パース開始")
@@ -40,8 +40,7 @@
             // Dispose of any resources that can be recreated.
         }
         
-// ----------------------------------------------------------------------------------
-        
+// -----------------------------------------------------------------------------
         //タグの最初が見つかったとき呼ばれる
         func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
             self.currentElementName = nil // 初期化
@@ -56,7 +55,7 @@
         // 開始タグと終了タグでくくられたデータがあったときに実行されるメソッド。stringが得られる
          func parser(_ parser: XMLParser, foundCharacters string: String) {
              
-             if string != "\n" {// 改行でなければ読み取る
+             if string != "\n" { // 改行でなければ読み取る
                  
                  if self.feedItems.count > 0 {
                      let lastItem = self.feedItems[self.feedItems.count - 1]
@@ -83,20 +82,9 @@
         
         // タグの終わりが見つかったとき呼ばれる
         func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
-
-            // タグが"results"ならば、タグが閉じられた
-            if elementName == "results" {
-                print("おわり:")//確認ok
-                
-                let feedItem = self.feedItems
-
-                print(feedItem[1].address!)//optionalになっている
-                print(feedItem[1].longitude!)//optionalになっている
-                print(feedItem[1].latitude!)//optionalになっている
-            }
         }
  
-        //
+        // sent when the parser has completed parsing. If this is encountered, the parse was successful.
         func parserDidEndDocument(_ parser: XMLParser) {
             self.tableView.reloadData()
         }
@@ -115,16 +103,16 @@
                 cell.textLabel?.text = feedItem.address // 検索結果　住所の表示
             return cell
         }
-        
+
+        // セルを選択したとき
         func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
             let feedItem = self.feedItems[indexPath.row]
-          //  let ad2 = feedItem
             
             longLabel.text = feedItem.longitude!
             latLabel.text = feedItem.latitude!
-            print("選択した:\(feedItem.address!)")
-            print("選択した:\(feedItem.longitude!)")
-            print("選択した:\(feedItem.latitude!)")
+            print("選択した地点:\(feedItem.address!)")
+            print("選択した地点:\(feedItem.longitude!)")
+            print("選択した地点:\(feedItem.latitude!)")
         }
         
     }
