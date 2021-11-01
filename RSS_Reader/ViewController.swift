@@ -42,10 +42,10 @@
         func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
             self.currentElementName = nil // 初期化
             if elementName == "address" {
-                currentElementName = "address"//???????????
-                self.feedItems.append(FeedItem())//???????????
+                currentElementName = "address" //
+                self.feedItems.append(FeedItem()) // tableViewに表示する配列に追加
             } else {
-                currentElementName = elementName
+               currentElementName = elementName
             }
         }
         
@@ -105,11 +105,11 @@
         func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
             let feedItem = self.feedItems[indexPath.row]
             
-            longLabel.text = feedItem.longitude!
-            latLabel.text = feedItem.latitude!
-            print("選択した地点:\(feedItem.address!)")
-            print("選択した地点:\(feedItem.longitude!)")
-            print("選択した地点:\(feedItem.latitude!)")
+            longLabel.text = feedItem.longitude! //確認用
+            latLabel.text = feedItem.latitude! //確認用
+            print("選択した地点:\(feedItem.address!)") //確認用
+            print("選択した地点:\(feedItem.longitude!)") //確認用
+            print("選択した地点:\(feedItem.latitude!)") //確認用
         }
         
     }
