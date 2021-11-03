@@ -12,24 +12,20 @@
     class ViewController: UIViewController, UISearchBarDelegate,UITableViewDelegate, UITableViewDataSource, XMLParserDelegate {
         
         @IBOutlet weak var searchText: UISearchBar!
-        
         @IBOutlet weak var longLabel: UILabel! // 確認用
-        
         @IBOutlet weak var latLabel: UILabel! // 確認用
-        
         @IBOutlet weak var tableView: UITableView!
 
         let feedUrl = URL(string:"https://geocode.csis.u-tokyo.ac.jp/cgi-bin/simple_geocode.cgi?addr=%E6%96%B0%E5%AE%BF")! //新宿
-        
         var feedItems = [FeedItem]() // tableViewの表示に使っている
         var currentElementName:String! // パース中に、読み出している項目名
-        
         
 // -------------------------------------------------------------------------------
         override func viewDidLoad() {
             super.viewDidLoad()
             searchText.delegate = self
             searchText.placeholder = "検索する地名を入力"
+            
             print("パース開始")
             let parser: XMLParser! = XMLParser(contentsOf: feedUrl) //feedUrlの中身をパースする？
             parser.delegate = self
@@ -42,23 +38,24 @@
         }
         
 //-----------------------------------------------------------------------------
+        // searchBarへの入力に対する処理
         func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
             //キーボードを閉じる
             view.endEditing(true)
             if let searchWord = searchBar.text {
-                print(searchWord)
+                print("検索地名:\(searchWord)") // OK
             //入力されていたら、地名を検索する
                 searchPlace(keyword: searchWord)
             }
         }
-        //searchPlace メソッド
+        // 地名の検索  searchPlace メソッド
         // 第一引数：keyword 検索したい語句
         func searchPlace(keyword:String) {
             // keyword をurlエンコードする
             guard let keyword_encode = keyword.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
                 return
             }
-            // リクエストurlの組み立て
+            // keyword_encode を使って、リクエストurlを組み立てる
             guard let req_url = URL(string: "https://geocode.csis.u-tokyo.ac.jp/cgi-bin/simple_geocode.cgi?addr=\(keyword_encode)") else {
                 return
             }
@@ -66,16 +63,17 @@
             let req = URLRequest(url: req_url)
             
             let task = URLSession.shared.dataTask(with: req, completionHandler: {(data,response,error) in
-            let parser:XMLParser? = XMLParser(data:data!)
-            parser!.delegate = self
-            parser!.parse()
+                let parser:XMLParser? = XMLParser(data:data!)
+                parser!.delegate = self
+                parser!.parse()//ここでエラー
             })
             
             // ダウンロード開始
-            task.resume()
-            print(req_url)//入力されていたら、urlを表示する
+            task.resume() // 入力された地名を検索する・・・OK
+            print("req_url:\(req_url)")//入力されていたら、地名の検索結果を表示する・・・OK
         }
         
+        //-----------------------------------------------------------------------------
         
         //-----------------------------------------------------------------------------
         //タグの最初が見つかったとき呼ばれる
@@ -123,7 +121,8 @@
  
         // sent when the parser has completed parsing. If this is encountered, the parse was successful.
         func parserDidEndDocument(_ parser: XMLParser) {
-            self.tableView.reloadData()
+            self.tableView.reloadData() //ここでエラーが出る
+            // UITableView.reloadData() must be used from main thread only
         }
 
         
@@ -161,58 +160,4 @@ class FeedItem {
     var longitude: String!
     var latitude: String!
     }
-
-//========================================
-//class Search: UIViewController,UISearchBarDelegate,XMLParserDelegate {
-//
-//
-// //   @IBOutlet private weak var tableView: UITableView!
-//
-//
-//    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-//        //キーボードを閉じる
-//        view.endEditing(true)
-//        if let searchWord = searchBar.text {
-//            print(searchWord)
-//        //入力されていたら、地名を検索する
-//            searchPlace(keyword: searchWord)
-//        }
-//    }
-//
-//    //searchPlace メソッド
-//    // 第一引数：keyword 検索したい語句
-//    func searchPlace(keyword:String) {
-//        // keyword をurlエンコードする
-//        guard let keyword_encode = keyword.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
-//            return
-//        }
-//        // リクエストurlの組み立て
-//        guard let req_url = URL(string: "https://geocode.csis.u-tokyo.ac.jp/cgi-bin/simple_geocode.cgi?addr=\(keyword_encode)") else {
-//            return
-//        }
-//        // リクエストに必要な情報を生成する
-//        let req = URLRequest(url: req_url)
-//
-//        let task = URLSession.shared.dataTask(with: req, completionHandler: {(data,response,error) in
-//        let parser:XMLParser? = XMLParser(data:data!)
-//        parser!.delegate = self
-//        parser!.parse()
-//        })
-//
-//        // ダウンロード開始
-//        task.resume()
-//        print(req_url)//入力されていたら、urlを表示する
-//    }
-//    
-//    //private var searchCompleter = MKLocalSearchCompleter()
-//
-//
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-//
-//        searchText.delegate = self
-//        searchText.placeholder = "検索する地名を入力"
-//    }
-    
-// 
 
