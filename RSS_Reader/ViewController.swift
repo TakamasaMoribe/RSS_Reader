@@ -12,8 +12,7 @@
     class ViewController: UIViewController, UISearchBarDelegate,UITableViewDelegate, UITableViewDataSource, XMLParserDelegate {
         
         @IBOutlet weak var searchText: UISearchBar!
-        @IBOutlet weak var longLabel: UILabel! // 確認用
-        @IBOutlet weak var latLabel: UILabel! // 確認用
+
         @IBOutlet weak var tableView: UITableView!
 
         let feedUrl = URL(string:"https://geocode.csis.u-tokyo.ac.jp/cgi-bin/simple_geocode.cgi?addr=%E6%96%B0%E5%AE%BF")! //新宿
