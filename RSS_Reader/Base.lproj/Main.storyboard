@@ -25,20 +25,6 @@
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="ihK-3S-e0P"/>
                                 </connections>
                             </tableView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="latLabel" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LmE-Lt-6SR">
-                                <rect key="frame" x="194" y="74" width="140" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="longLabel" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="xDp-fL-Wns">
-                                <rect key="frame" x="13" y="73" width="321" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <searchBar contentMode="redraw" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xnF-La-xe1">
                                 <rect key="frame" x="0.0" y="15" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
@@ -49,8 +35,6 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <connections>
-                        <outlet property="latLabel" destination="LmE-Lt-6SR" id="BBQ-5Y-QVZ"/>
-                        <outlet property="longLabel" destination="xDp-fL-Wns" id="iq6-Vp-KCD"/>
                         <outlet property="searchText" destination="xnF-La-xe1" id="xRu-Xx-Eg3"/>
                         <outlet property="tableView" destination="IcP-Bb-u3w" id="GWv-8q-xTo"/>
                     </connections>

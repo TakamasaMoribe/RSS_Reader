@@ -15,6 +15,7 @@
 
         @IBOutlet weak var tableView: UITableView!
 
+        // feedUrl：tableViewで選択したものを代入するようにする
         let feedUrl = URL(string:"https://geocode.csis.u-tokyo.ac.jp/cgi-bin/simple_geocode.cgi?addr=%E6%96%B0%E5%AE%BF")! //新宿
         var feedItems = [FeedItem]() // tableViewの表示に使っている
         var currentElementName:String! // パース中に、読み出している項目名
@@ -22,8 +23,11 @@
 // -------------------------------------------------------------------------------
         override func viewDidLoad() {
             super.viewDidLoad()
+            
             searchText.delegate = self
             searchText.placeholder = "検索する地名を入力"
+            // このあと。検索結果を返すようにする
+            
             
             print("パース開始")
             let parser: XMLParser! = XMLParser(contentsOf: feedUrl) //feedUrlの中身をパースする？
@@ -143,8 +147,6 @@
         func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
             let feedItem = self.feedItems[indexPath.row]
             
-            longLabel.text = feedItem.longitude! //確認用
-            latLabel.text = feedItem.latitude! //確認用
             print("選択した地点:\(feedItem.address!)") //確認用
             print("選択した地点:\(feedItem.longitude!)") //確認用
             print("選択した地点:\(feedItem.latitude!)") //確認用
