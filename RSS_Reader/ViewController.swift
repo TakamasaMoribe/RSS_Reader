@@ -36,9 +36,9 @@
             // tableView へは表示されない
             print("feedUrl初期値：\(feedUrl)") //初期値が表示される
             // パースの前に　検索結果のアドレスをfeedUrlへ代入する必要がある
-            let parser: XMLParser! = XMLParser(contentsOf: feedUrl) //feedUrlの中身をパースする？
-            parser.delegate = self
-            parser.parse()
+//            let parser: XMLParser! = XMLParser(contentsOf: feedUrl) //feedUrlの中身をパースする？
+//            parser.delegate = self
+//            parser.parse()
         }
         
         override func didReceiveMemoryWarning() {
@@ -70,18 +70,19 @@
             }
             
             // リクエストに必要な情報を生成する 正しく生成されている
-            //let req = URLRequest(url: req_url) //　使っていない
+            let req = URLRequest(url: req_url)
             feedUrl = req_url
             
             // 地名検索の結果（候補）は得られているので、これをtabaleViewに表示して、そこから目的地を選ぶようにする。
-//            let task = URLSession.shared.dataTask(with: req, completionHandler: {(data,response,error) in
-//                let parser:XMLParser? = XMLParser(data:data!)
-//                parser!.delegate = self
-//                parser!.parse()//ここでエラー
-//            })
-//
-//            // ダウンロード開始
-//            task.resume() // 入力された地名を検索する・・・OK
+            let task = URLSession.shared.dataTask(with: req, completionHandler: {(data,response,error) in
+                let parser: XMLParser! = XMLParser(contentsOf: self.feedUrl) //feedUrlの中身をパースする？
+  //              let parser:XMLParser? = XMLParser(data:data!)
+                parser!.delegate = self
+                parser!.parse()//ここでエラー
+            })
+
+            // ダウンロード開始
+            task.resume() // 入力された地名を検索する・・・OK
             print("feedUrl:\(feedUrl)")//入力されていたら、地名の検索結果があるアドレスを表示する。
         }
         
