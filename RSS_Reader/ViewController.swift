@@ -134,7 +134,7 @@
  
         // sent when the parser has completed parsing. If this is encountered, the parse was successful.
         func parserDidEndDocument(_ parser: XMLParser) {
-            self.tableView.reloadData() //ここでエラーが出る
+            self.tableView.reloadData() //ここでエラーが出る  1113
             // UITableView.reloadData() must be used from main thread only
         }
 
