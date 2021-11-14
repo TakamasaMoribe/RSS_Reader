@@ -39,10 +39,10 @@
             
             // パースの前に　検索結果のアドレスをfeedUrlへ代入する必要がある
             // 先にsearchBarでの検索結果を取得するようにする
-            let parser: XMLParser! = XMLParser(contentsOf: feedUrl) //feedUrlの中身をパースする？
-            print("40行")
-            parser.delegate = self
-            parser.parse() // ここでパース。結果はtableViewへ表示される
+//            let parser: XMLParser! = XMLParser(contentsOf: feedUrl) //feedUrlの中身をパースする？
+            print("40行　override func viewDidLoad()　おわり")
+//            parser.delegate = self
+//            parser.parse() // ここでパース。結果はtableViewへ表示される
         }
         
         override func didReceiveMemoryWarning() {
@@ -56,11 +56,17 @@
             //キーボードを閉じる
             view.endEditing(true)
             if let searchWord = searchBar.text {
-                print("検索地名:\(searchWord)") // キーボードからsearchBarに入力した地名の表示
+                print("検索地名:\(searchWord)") // キーボードからsearchBarに入力した地名の表示 ①
             //入力されていたら、地名を検索する
                 searchPlace(keyword: searchWord)
             }
+//        // このあとにパースしてみる
+//            let parser: XMLParser! = XMLParser(contentsOf: feedUrl) //feedUrlの中身をパースする？
+//            parser.delegate = self
+//            parser.parse() // ここでパース。結果はtableViewへ表示されない・・・・・・
+            
         }
+        
         // 地名の検索  searchPlace メソッド
         // 第一引数：keyword 検索したい語句
         func searchPlace(keyword:String) {
@@ -74,10 +80,16 @@
             }
             
             feedUrl = req_url// tableViewに表示する
+            print("feedUrl:\(feedUrl)")//入力されていたら、地名の検索結果があるアドレスを表示する。②
+                    // このあとにパースしてみる
+            print("パース開始２")
+                        let parser: XMLParser! = XMLParser(contentsOf: feedUrl) //feedUrlの中身をパースする？
+                        parser.delegate = self
+                        parser.parse() // ここでパース。結果はtableViewへ表示されない・・・・・・
             
             // リクエストに必要な情報を生成する 正しく生成されている
             // req 入力した文字に対して、taskを実行するときに使用する
-            let req = URLRequest(url: req_url)
+            //let req = URLRequest(url: req_url)
             //feedUrl = req_url
             
 //            // 地名検索の結果（候補）は得られているので、これをtabaleViewに表示して、そこから目的地を選ぶようにする。
@@ -90,8 +102,8 @@
 //
 //            // ダウンロード開始
 //            task.resume() // 入力された地名を検索する・・・OK
-            print("feedUrl:\(feedUrl)")//入力されていたら、地名の検索結果があるアドレスを表示する。
-//不要？            self.tableView.reloadData() //ここでエラーが出る  1113 tableView
+
+            self.tableView.reloadData() //ここでエラーが出る
         }
         
         //-----------------------------------------------------------------------------
@@ -142,6 +154,7 @@
  
         // sent when the parser has completed parsing. If this is encountered, the parse was successful.
         func parserDidEndDocument(_ parser: XMLParser) {
+            print("パース終了")
             //self.tableView.reloadData() //ここでエラーが出る  1113
             // UITableView.reloadData() must be used from main thread only
         }
