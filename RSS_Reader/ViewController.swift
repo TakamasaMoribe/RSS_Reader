@@ -33,12 +33,12 @@
             // 検索結果のアドレスは、以下のように得られている
             // 検索地名:戸田
             // feedUrl:https://geocode.csis.u-tokyo.ac.jp/cgi-bin/simple_geocode.cgi?addr=%E6%88%B8%E7%94%B0
-            // tableView へは表示されない
             print("feedUrl初期値：\(feedUrl)") //初期値が表示される
             // パースの前に　検索結果のアドレスをfeedUrlへ代入する必要がある
-//            let parser: XMLParser! = XMLParser(contentsOf: feedUrl) //feedUrlの中身をパースする？
-//            parser.delegate = self
-//            parser.parse()
+            let parser: XMLParser! = XMLParser(contentsOf: feedUrl) //feedUrlの中身をパースする？
+            print("40行")
+            parser.delegate = self
+            parser.parse() // ここでパース。結果はtableViewへ表示される
         }
         
         override func didReceiveMemoryWarning() {
@@ -84,6 +84,7 @@
             // ダウンロード開始
             task.resume() // 入力された地名を検索する・・・OK
             print("feedUrl:\(feedUrl)")//入力されていたら、地名の検索結果があるアドレスを表示する。
+//不要？            self.tableView.reloadData() //ここでエラーが出る  1113 tableView
         }
         
         //-----------------------------------------------------------------------------
@@ -134,7 +135,7 @@
  
         // sent when the parser has completed parsing. If this is encountered, the parse was successful.
         func parserDidEndDocument(_ parser: XMLParser) {
-            self.tableView.reloadData() //ここでエラーが出る  1113
+            //self.tableView.reloadData() //ここでエラーが出る  1113
             // UITableView.reloadData() must be used from main thread only
         }
 
