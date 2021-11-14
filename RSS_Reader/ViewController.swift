@@ -15,9 +15,10 @@
 
         @IBOutlet weak var tableView: UITableView!
 
-        // feedUrl：tableViewで選択したものを代入するようにする
-        var feedUrl = URL(string:"https://geocode.csis.u-tokyo.ac.jp/cgi-bin/simple_geocode.cgi?addr=%E6%96%B0%E5%AE%BF")! //新宿
+        // feedUrl：tableViewで選択したものを代入するようにする？？？？？ちがう？？
+//        var feedUrl = URL(string:"https://geocode.csis.u-tokyo.ac.jp/cgi-bin/simple_geocode.cgi?addr=%E6%96%B0%E5%AE%BF")! //新宿
 //        var feedUrl:URL = URL(string:"https://geocode.csis.u-tokyo.ac.jp/cgi-bin/simple_geocode.cgi")! //東大
+        var feedUrl:URL = URL(string:"5")! //初期化
         var feedItems = [FeedItem]() // tableViewの表示に使っている
         var currentElementName:String! // パース中に、読み出している項目名
         
@@ -34,7 +35,10 @@
             // 検索地名:戸田
             // feedUrl:https://geocode.csis.u-tokyo.ac.jp/cgi-bin/simple_geocode.cgi?addr=%E6%88%B8%E7%94%B0
             print("feedUrl初期値：\(feedUrl)") //初期値が表示される
+            
+            
             // パースの前に　検索結果のアドレスをfeedUrlへ代入する必要がある
+            // 先にsearchBarでの検索結果を取得するようにする
             let parser: XMLParser! = XMLParser(contentsOf: feedUrl) //feedUrlの中身をパースする？
             print("40行")
             parser.delegate = self
@@ -69,20 +73,23 @@
                 return
             }
             
-            // リクエストに必要な情報を生成する 正しく生成されている
-            let req = URLRequest(url: req_url)
-            feedUrl = req_url
+            feedUrl = req_url// tableViewに表示する
             
-            // 地名検索の結果（候補）は得られているので、これをtabaleViewに表示して、そこから目的地を選ぶようにする。
-            let task = URLSession.shared.dataTask(with: req, completionHandler: {(data,response,error) in
-                let parser: XMLParser! = XMLParser(contentsOf: self.feedUrl) //feedUrlの中身をパースする？
-  //              let parser:XMLParser? = XMLParser(data:data!)
-                parser!.delegate = self
-                parser!.parse()//ここでエラー
-            })
-
-            // ダウンロード開始
-            task.resume() // 入力された地名を検索する・・・OK
+            // リクエストに必要な情報を生成する 正しく生成されている
+            // req 入力した文字に対して、taskを実行するときに使用する
+            let req = URLRequest(url: req_url)
+            //feedUrl = req_url
+            
+//            // 地名検索の結果（候補）は得られているので、これをtabaleViewに表示して、そこから目的地を選ぶようにする。
+//            let task = URLSession.shared.dataTask(with: req, completionHandler: {(data,response,error) in
+//                let parser: XMLParser! = XMLParser(contentsOf: self.feedUrl) //feedUrlの中身をパースする？
+//  //              let parser:XMLParser? = XMLParser(data:data!)
+//                parser!.delegate = self
+//                parser!.parse()//ここでエラー
+//            })
+//
+//            // ダウンロード開始
+//            task.resume() // 入力された地名を検索する・・・OK
             print("feedUrl:\(feedUrl)")//入力されていたら、地名の検索結果があるアドレスを表示する。
 //不要？            self.tableView.reloadData() //ここでエラーが出る  1113 tableView
         }
