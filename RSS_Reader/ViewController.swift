@@ -4,6 +4,12 @@
 //
 //  Created by 森部高昌 on 2021/11/14.
 
+//  ①searchBarに検索する地名を入力する
+//  ②"https://geocode.csis.u-tokyo.ac.jp/cgi-bin/simple_geocode.cgi"に問い合わせる
+//  ③返ってきた値をtableViewに表示する。
+//  ④tableViewで選択したcellから、地名・緯度・経度を取得する
+
+
     import UIKit
 
     class ViewController: UIViewController, UISearchBarDelegate,UITableViewDelegate, UITableViewDataSource, XMLParserDelegate {
@@ -12,11 +18,11 @@
 
         @IBOutlet weak var tableView: UITableView!
 
-        // feedUrl：tableViewで選択したものを代入するようにする？？？？？ちがう？？
+        // feedUrl：searchBarに入力した地名を問い合わせるのに使う
 //        var feedUrl:URL = URL(string:"https://geocode.csis.u-tokyo.ac.jp/cgi-bin/simple_geocode.cgi")! //東大
-        var feedUrl:URL = URL(string:"Dummy")! //初期化 何か入れていないとエラーになるのでDummyとした
-        var feedItems = [FeedItem]() // tableViewの表示に使っている
-        var currentElementName:String! // パース中に、読み出している項目名
+        var feedUrl:URL = URL(string:"Dummy")! //初期化 何か入れていないとエラーになるので、とりあえずDummyとした
+        var feedItems = [FeedItem]() // FeedItem　別クラス。返ってきた値をtableViewに表示するために使っている
+        var currentElementName:String! // 返ってきた値をパースしている最中に、読み出している項目名
         
 // -------------------------------------------------------------------------------
         
@@ -55,12 +61,13 @@
             }
             
             feedUrl = req_url // パースするときに使っている
-            print("②feedUrl:\(feedUrl)")//入力されていたら、地名の検索結果があるアドレスを表示する。②
-            print("パース開始")
-                let parser: XMLParser! = XMLParser(contentsOf: feedUrl) //feedUrlの中身をパースする
+            print("②feedUrl:\(feedUrl)")//入力されていたら、アドレスを表示する。
+            //feedUrlの中身をパースする
+                print("パース開始")
+                let parser: XMLParser! = XMLParser(contentsOf: feedUrl)
                 parser.delegate = self
                 parser.parse()
-            self.tableView.reloadData() //tableViewへ表示
+            self.tableView.reloadData() //tableViewへ表示する
         }
         
 //-----------------------------------------------------------------------------
@@ -106,6 +113,7 @@
         
         // タグの終わりが見つかったとき呼ばれる
         func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
+            //print("タグの終わり\(elementName)")
         }
  
         // sent when the parser has completed parsing. If this is encountered, the parse was successful.
@@ -114,7 +122,7 @@
         }
 
         
-//-----------------------------------------------------------------------------
+// tableView への表示・セルの選択----------------------------------------
         // 行数の取得
         func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
             return self.feedItems.count
