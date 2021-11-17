@@ -21,7 +21,7 @@
         // feedUrl：searchBarに入力した地名を問い合わせるのに使う
 //        var feedUrl:URL = URL(string:"https://geocode.csis.u-tokyo.ac.jp/cgi-bin/simple_geocode.cgi")! //東大
         var feedUrl:URL = URL(string:"Dummy")! //初期化 何か入れていないとエラーになるので、とりあえずDummyとした
-        var feedItems = [FeedItem]() // FeedItem　別クラス。返ってきた値をtableViewに表示するために使っている
+        var feedItems = [FeedItem]() // FeedItem　別クラスの配列。返ってきた値をtableViewに表示するために使う
         var currentElementName:String! // 返ってきた値をパースしている最中に、読み出している項目名
         
 // -------------------------------------------------------------------------------
@@ -139,10 +139,14 @@
         // セルを選択したとき
         func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
             let feedItem = self.feedItems[indexPath.row]
-            
             print("選択した地点:\(feedItem.address!)") //確認用
             print("選択した地点:\(feedItem.longitude!)") //確認用
             print("選択した地点:\(feedItem.latitude!)") //確認用
+            // 選択した地点のデータを保存する
+            let userDefaults = UserDefaults.standard
+            userDefaults.set(feedItem.address!, forKey: "selectAddress")
+            userDefaults.set(feedItem.longitude!, forKey: "selectLongitude")
+            userDefaults.set(feedItem.latitude!, forKey: "selectLatitude")
         }
         
     }
